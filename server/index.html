@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Viewer</title>
+    <!-- Biblioteca OpenSeaDragon para renderização de imagens -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/openseadragon/2.4.2/openseadragon.min.js"></script>
+    <style>
+        /* Remove margens e define estilos para o corpo */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        /* Define o container principal para o visualizador */
+        #viewer {
+            width: 100%;
+            height: 100vh; /* Ocupa a altura inteira da janela */
+            background-color: #000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Container do visualizador -->
+    <div id="viewer"></div>
+
+    <script>
+        // Função para obter parâmetros da query string (ex: ?image=nomeImagem)
+        function getQueryParameter(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param); // Retorna o valor do parâmetro fornecido
+        }
+
+        // Inicializa o visualizador OpenSeaDragon
+        const viewer = OpenSeadragon({
+            id: "viewer",
+            prefixUrl: "https://cdnjs.cloudflare.com/ajax/libs/openseadragon/2.4.2/images/"
+        });
+
+        // Obtém o nome da imagem passado como parâmetro na URL
+        const image = getQueryParameter('image');
+
+        if (image) {
+            if (image.endsWith('.dzi')) {
+                // Renderiza imagens no formato .dzi usando OpenSeaDragon
+                //viewer.open(`http://localhost:8000/static/${image}`);
+                viewer.open(`http://192.168.2.110:8000/static/${image}`); //Trocando pelo meu ip da rede para funcionar no expo go 
+            } else {
+                // Renderiza imagens normais (jpeg, png etc.)
+                document.getElementById('viewer').innerHTML = `
+                    <img src="http://192.168.2.110:8000/images/${image}" 
+                         style="width: 100%; height: 100%; object-fit: contain;" />
+                `; //Trocando pelo meu ip da rede para funcionar no expo go
+                /*document.getElementById('viewer').innerHTML = `
+                    <img src="http://localhost:8000/images/${image}" 
+                         style="width: 100%; height: 100%; object-fit: contain;" />
+                `;*/
+            }
+        } else {
+            // Caso nenhuma imagem seja fornecida, exibe uma mensagem
+            document.getElementById('viewer').innerHTML = `
+                <p style="color: white; text-align: center; margin-top: 20%;">
+                    Nenhuma imagem selecionada!
+                </p>
+            `;
+        }
+    </script>
+</body>
+</html>
