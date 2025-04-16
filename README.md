@@ -15,6 +15,37 @@ permitindo visualização avançada com zoom e pan através do OpenSeaDragon.
 - Página HTML (index.html): Usada para exibir imagens no navegador, renderizando imagens com o OpenSeaDragon ou
 reornando uma tag html de imagem.
 
+# Pré-requisitos para Funcionamento do Projeto:
+
+1. Node.js e NPM:
+   - Necessário para rodar o aplicativo React Native/Expo.
+   - Recomenda-se instalar a versão 16: https://nodejs.org/.
+   - O NPM será recomendado na instalação.
+
+2. Expo CLI:
+   - Utilize o comando `npm install -g expo-cli` ou `npx expo` para rodar o projeto.
+
+3. Python 3:
+   - Necessário para rodar o servidor Flask: https://www.python.org/.
+
+4. Bibliotecas Python:
+   - Flask: Para criar o servidor.
+   - Requests: Para gerenciar downloads de arquivos.
+   - Pyvips: Para converter arquivos .svs para o formato .dzi.
+   - Instale executando: `pip install Flask requests pyvips`.
+
+5. Bibliotecas e Ferramentas JS:
+   - Execute `npm install` na raiz do projeto para instalar dependências.
+
+6. OpenSeaDragon:
+   - Já incluído no projeto; não requer instalação adicional.
+
+7. Configuração de Rede:
+   - Substitua `localhost` pelo IP local (ex.: `http://192.168.2.110:8000`) para o Expo Go funcionar.
+   - Caso utilize a Web, o localhost é suficiente, mas por padrão esta o meu IP da rede, que não necessáriamente é o mesmo, olhe com `ipconfig` no terminal.
+
+Esses componentes são necessários para garantir o funcionamento adequado do servidor Flask, do aplicativo Expo e da renderização via OpenSeaDragon.
+
 # Funcionalidades:
 
 # 1. Servidor Flask:
