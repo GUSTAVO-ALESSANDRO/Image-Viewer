@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Visualizador OpenSeaDragon</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/openseadragon/2.4.2/openseadragon.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #000;
+    }
+    #viewer {
+      width: 95%;
+      height: 95%;
+      background-color: #333;
+    }
+    #image-picker {
+      margin-bottom: 10px;
+    }
+    #image-picker select {
+      font-size: 18px;
+      padding: 5px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Dropdown para escolher imagens -->
+  <div id="image-picker">
+    <label for="image-select" style="color: white;">Escolha uma imagem:</label>
+    <select id="image-select">
+      <option value="">Selecione...</option>
+    </select>
+  </div>
+
+  <!-- Div para o OpenSeaDragon -->
+  <div id="viewer"></div>
+
+  <script>
+    // Função para obter imagens disponíveis
+    async function fetchAvailableImages() {
+      const response = await fetch('/list-images'); // Faz uma requisição ao servidor
+      const images = await response.json(); // Converte para JSON
+      return images;
+    }
+
+    // Preencher o dropdown com as imagens disponíveis
+    async function populateImagePicker() {
+      const selectElement = document.getElementById('image-select');
+      const images = await fetchAvailableImages();
+
+      images.forEach(image => {
+        const option = document.createElement('option');
+        option.value = image;
+        option.textContent = image;
+        selectElement.appendChild(option);
+      });
+    }
+
+    // Inicializa o OpenSeaDragon e carrega a imagem selecionada
+    function initializeOpenSeadragon(imageParam) {
+      const viewer = OpenSeadragon({
+        id: "viewer",
+        prefixUrl: "https://cdnjs.cloudflare.com/ajax/libs/openseadragon/2.4.2/images/"
+      });
+
+      if (imageParam && imageParam.endsWith('.dzi')) {
+        const imageURL = window.location.origin + '/image/' + imageParam;
+        viewer.open(imageURL); // Abre a imagem no visualizador
+      } else {
+        document.getElementById('viewer').innerHTML = '<p style="color: white; text-align: center; margin-top: 20%;">Nenhuma imagem selecionada!</p>';
+      }
+    }
+
+    // Quando o usuário escolhe uma imagem, inicializa o OpenSeadragon
+    document.getElementById('image-select').addEventListener('change', function() {
+      const selectedImage = this.value;
+      initializeOpenSeadragon(selectedImage);
+    });
+
+    // Carregar a lista de imagens ao inicializar
+    populateImagePicker();
+  </script>
+</body>
+</html>
