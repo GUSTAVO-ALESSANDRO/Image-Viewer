@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Visualizador OpenSeaDragon</title>
+  <title>Visualizador de Imagens</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/openseadragon/2.4.2/openseadragon.min.js"></script>
   <style>
     body {
@@ -18,6 +18,9 @@
     #viewer {
       width: 95%;
       height: 95%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background-color: #333;
     }
     #image-picker {
@@ -26,6 +29,11 @@
     #image-picker select {
       font-size: 18px;
       padding: 5px;
+    }
+    img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
     }
   </style>
 </head>
@@ -38,15 +46,23 @@
     </select>
   </div>
 
-  <!-- Div para o OpenSeaDragon -->
+  <!-- Div para o visualizador -->
   <div id="viewer"></div>
 
   <script>
     // Função para obter imagens disponíveis
     async function fetchAvailableImages() {
-      const response = await fetch('/list-images'); // Faz uma requisição ao servidor
-      const images = await response.json(); // Converte para JSON
-      return images;
+      try {
+        const response = await fetch('/list-images'); // Faz uma requisição ao servidor
+        if (!response.ok) {
+          throw new Error('Falha ao buscar imagens.');
+        }
+        const images = await response.json(); // Converte para JSON
+        return images;
+      } catch (error) {
+        console.error('Erro ao buscar imagens:', error);
+        return [];
+      }
     }
 
     // Preencher o dropdown com as imagens disponíveis
@@ -56,31 +72,43 @@
 
       images.forEach(image => {
         const option = document.createElement('option');
-        option.value = image;
-        option.textContent = image;
+        option.value = image; // O valor será usado para carregar no viewer
+        option.textContent = image; // O texto exibido no dropdown
         selectElement.appendChild(option);
       });
     }
 
-    // Inicializa o OpenSeaDragon e carrega a imagem selecionada
-    function initializeOpenSeadragon(imageParam) {
-      const viewer = OpenSeadragon({
-        id: "viewer",
-        prefixUrl: "https://cdnjs.cloudflare.com/ajax/libs/openseadragon/2.4.2/images/"
-      });
+    // Inicializa o visualizador
+    let viewer = null; // Declara o visualizador no escopo global
+    function initializeViewer(imageParam) {
+      const viewerContainer = document.getElementById('viewer');
+      viewerContainer.innerHTML = ''; // Limpa o conteúdo anterior
 
-      if (imageParam && imageParam.endsWith('.dzi')) {
-        const imageURL = window.location.origin + '/image/' + imageParam;
+      if (imageParam.endsWith('.dzi')) {
+        // Usa o OpenSeaDragon para arquivos .dzi
+        if (viewer) {
+          viewer.destroy(); // Destroi a instância anterior do OpenSeaDragon
+        }
+        viewer = OpenSeadragon({
+          id: "viewer",
+          prefixUrl: "https://cdnjs.cloudflare.com/ajax/libs/openseadragon/2.4.2/images/"
+        });
+        const imageURL = window.location.origin + '/static/' + imageParam;
         viewer.open(imageURL); // Abre a imagem no visualizador
       } else {
-        document.getElementById('viewer').innerHTML = '<p style="color: white; text-align: center; margin-top: 20%;">Nenhuma imagem selecionada!</p>';
+        // Renderiza imagens padrão com uma tag <img>
+        const imageURL = window.location.origin + '/static/' + imageParam;
+        const imgElement = document.createElement('img');
+        imgElement.src = imageURL;
+        imgElement.alt = "Imagem selecionada";
+        viewerContainer.appendChild(imgElement);
       }
     }
 
-    // Quando o usuário escolhe uma imagem, inicializa o OpenSeadragon
+    // Quando o usuário escolhe uma imagem, inicializa o visualizador
     document.getElementById('image-select').addEventListener('change', function() {
       const selectedImage = this.value;
-      initializeOpenSeadragon(selectedImage);
+      initializeViewer(selectedImage);
     });
 
     // Carregar a lista de imagens ao inicializar
