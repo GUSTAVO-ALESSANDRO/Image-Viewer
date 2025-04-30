@@ -1,0 +1,19 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model doencas {
+  id          Int      @id @default(autoincrement())
+  titulo      String
+  descricao   String
+  author      String
+  sintomas    String
+  links       Json
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+}

@@ -1,0 +1,86 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+  }
+  .container {
+    width: 50%;
+    margin: auto;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+  }
+  label {
+    margin: 10px 0 5px;
+  }
+  input, textarea, button {
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+  #link-container {
+    margin-bottom: 20px;
+  }
+  .link-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  .link-item input {
+    flex: 1;
+  }
+  .remove-link-btn {
+    background-color: #FF0000;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 14px;
+    margin-left: 5px;
+  }
+  #doenca-id {
+    display: none;
+  }
+  #doenca-list {
+    margin-top: 20px;
+  }
+  .doenca-item {
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .action-btn-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .action-btn {
+    margin: 5px 0;
+    padding: 5px 10px;
+    cursor: pointer;
+    width: 100px;
+  }
+  .update-btn {
+    background-color: #FFC107;
+    border: none;
+    color: #fff;
+  }
+  .delete-btn {
+    background-color: #DC3545;
+    border: none;
+    color: #fff;
+  }
+  #add-link-btn {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 14px;
+  }
+  

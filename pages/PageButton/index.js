@@ -10,8 +10,8 @@ export default function PageButton() {
 
     useEffect(() => {
         // Busca a lista de imagens no servidor usando localhost
-        fetch('http://192.168.2.110:8000/list-images') //Trocando pelo meu ip da rede para funcionar no expo go 
-        //fetch('http://localhost:8000/list-images')
+        fetch('http://192.168.2.111:3333/list-images') //Trocando pelo meu ip da rede para funcionar no expo go 
+        //fetch('http://localhost:3333/list-images')
             .then((response) => response.json())
             .then((data) => setImages(data))
             .catch((error) => console.error('Erro ao buscar imagens:', error));
@@ -43,8 +43,8 @@ export default function PageButton() {
                     {/* Renderiza a imagem selecionada em uma WebView */}
                     {selectedImage === image && (
                         <WebView
-                            source={{ uri: `http://192.168.2.110:8000/?image=${image}` }} //Trocando pelo meu ip da rede para funcionar no expo go
-                            //source={{ uri: `http://localhost:8000/?image=${image}` }}
+                            source={{ uri: `http://192.168.2.111:3333/?image=${image}` }} //Trocando pelo meu ip da rede para funcionar no expo go
+                            //source={{ uri: `http://localhost:3333/?image=${image}` }}
                             style={styles.webview}
                             scrollEnabled={false} // Desativa scroll interno do WebView
                             onTouchStart={() => setIsWebViewActive(true)} // Controla o scroll geral

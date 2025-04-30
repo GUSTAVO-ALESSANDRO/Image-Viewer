@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>CRUD de Doenças</title>
+  <link rel="stylesheet" href="/views/crud.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Gerenciar Doenças</h1>
+    <!-- Formulário para criação e atualização -->
+    <form id="crud-form" method="POST" action="/doenca">
+      <!-- Campo oculto para armazenar o ID em caso de edição -->
+      <input type="hidden" id="doenca-id" name="doenca-id">
+      
+      <label for="titulo">Título</label>
+      <input type="text" id="titulo" name="titulo" required>
+      
+      <label for="descricao">Descrição</label>
+      <textarea id="descricao" name="descricao" required></textarea>
+      
+      <label for="author">Autor</label>
+      <input type="text" id="author" name="author" required>
+      
+      <label for="sintomas">Sintomas</label>
+      <textarea id="sintomas" name="sintomas" required></textarea>
+      
+      <label>Links</label>
+      <!-- Container onde os inputs de links serão adicionados -->
+      <div id="link-container"></div>
+      <!-- Botão para adicionar um novo campo de link -->
+      <button type="button" id="add-link-btn">+ Adicionar links de imagens</button>
+      <br>
+      <button type="submit">Salvar</button>
+      <!-- Botão "Cancelar Atualização" (aparece somente no modo update) -->
+      <button type="button" id="cancel-update" style="display:none;">Cancelar Atualização</button>
+    </form>
+    
+    <h2>Lista de Doenças</h2>
+    <div id="doenca-list"></div>
+  </div>
+  
+  <script src="/views/crud.js"></script>
+</body>
+</html>
