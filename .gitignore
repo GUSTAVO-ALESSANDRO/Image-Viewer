@@ -1,15 +1,15 @@
-# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+# Learn more: https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
 
-# dependencies
+# Node dependencies
 node_modules/
 
-# Expo
+# Expo related files
 .expo/
 dist/
 web-build/
 expo-env.d.ts
 
-# Native
+# Native files
 *.orig.*
 *.jks
 *.p8
@@ -17,24 +17,23 @@ expo-env.d.ts
 *.key
 *.mobileprovision
 
-# Metro
+# Metro bundler health-check
 .metro-health-check*
 
-# debug
+# Debug logs
 npm-debug.*
 yarn-debug.*
 yarn-error.*
 
-# macOS
+# macOS system files
 .DS_Store
 *.pem
 
-# local env files
+# Local environment files (ex.: .env.local)
 .env*.local
 
-serverType\.env
-
-# typescript
+# TypeScript build info
 *.tsbuildinfo
-"serverType/.env" 
-"serverType/.env" 
+
+# Ignore o arquivo .env da pasta serverType
+serverType/.env

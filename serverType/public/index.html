@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Visualizador OpenSeaDragon</title>
+  <title>Visualizador de Imagens</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/openseadragon/2.4.2/openseadragon.min.js"></script>
   <style>
     body {
@@ -18,73 +18,64 @@
     #viewer {
       width: 95%;
       height: 95%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background-color: #333;
     }
-    #image-picker {
-      margin-bottom: 10px;
+    img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
     }
-    #image-picker select {
-      font-size: 18px;
-      padding: 5px;
+    /* Caso deseje centralizar a mensagem de aviso */
+    .message {
+      color: white;
+      font-size: 20px;
     }
   </style>
 </head>
 <body>
-  <!-- Dropdown para escolher imagens -->
-  <div id="image-picker">
-    <label for="image-select" style="color: white;">Escolha uma imagem:</label>
-    <select id="image-select">
-      <option value="">Selecione...</option>
-    </select>
-  </div>
-
-  <!-- Div para o OpenSeaDragon -->
   <div id="viewer"></div>
-
   <script>
-    // Função para obter imagens disponíveis
-    async function fetchAvailableImages() {
-      const response = await fetch('/list-images'); // Faz uma requisição ao servidor
-      const images = await response.json(); // Converte para JSON
-      return images;
+    // Obtém o valor de um parâmetro específico da query string
+    function getQueryParameter(param) {
+      const params = new URLSearchParams(window.location.search);
+      return params.get(param);
     }
 
-    // Preencher o dropdown com as imagens disponíveis
-    async function populateImagePicker() {
-      const selectElement = document.getElementById('image-select');
-      const images = await fetchAvailableImages();
-
-      images.forEach(image => {
-        const option = document.createElement('option');
-        option.value = image;
-        option.textContent = image;
-        selectElement.appendChild(option);
-      });
-    }
-
-    // Inicializa o OpenSeaDragon e carrega a imagem selecionada
-    function initializeOpenSeadragon(imageParam) {
-      const viewer = OpenSeadragon({
-        id: "viewer",
-        prefixUrl: "https://cdnjs.cloudflare.com/ajax/libs/openseadragon/2.4.2/images/"
-      });
-
-      if (imageParam && imageParam.endsWith('.dzi')) {
-        const imageURL = window.location.origin + '/image/' + imageParam;
-        viewer.open(imageURL); // Abre a imagem no visualizador
+    let viewer = null;
+    function initializeViewer(imageParam) {
+      const viewerContainer = document.getElementById('viewer');
+      viewerContainer.innerHTML = '';
+      if (imageParam.endsWith('.dzi')) {
+        if (viewer) {
+          viewer.destroy();
+        }
+        viewer = OpenSeadragon({
+          id: "viewer",
+          prefixUrl: "https://cdnjs.cloudflare.com/ajax/libs/openseadragon/2.4.2/images/"
+        });
+        const imageURL = window.location.origin + '/static/' + imageParam;
+        viewer.open(imageURL);
       } else {
-        document.getElementById('viewer').innerHTML = '<p style="color: white; text-align: center; margin-top: 20%;">Nenhuma imagem selecionada!</p>';
+        const imageURL = window.location.origin + '/static/' + imageParam;
+        const imgElement = document.createElement('img');
+        imgElement.src = imageURL;
+        imgElement.alt = "Imagem selecionada";
+        viewerContainer.appendChild(imgElement);
       }
     }
 
-    // Quando o usuário escolhe uma imagem, inicializa o OpenSeadragon
-    document.getElementById('image-select').addEventListener('change', function() {
-      const selectedImage = this.value;
-      initializeOpenSeadragon(selectedImage);
-    });
-
-    // Carregar a lista de imagens ao inicializar
-    populateImagePicker();
+    // Verifica se há um parâmetro "image" na URL
+    const imageParam = getQueryParameter('image');
+    if (imageParam) {
+      initializeViewer(imageParam);
+    } else {
+      // Caso contrário, exibe uma mensagem de aviso
+      document.getElementById('viewer').innerHTML =
+        '<p class="message">Nenhuma imagem selecionada.</p>';
+    }
   </script>
 </body>
 </html>
